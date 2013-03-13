@@ -1,0 +1,21 @@
+{
+	"name" : "node-theseus",
+	"description" : "wrapper of the node command for debugging scripts with Theseus",
+	"license" : "MIT",
+	"author" : "Tom Lieber <tom@alltom.com>",
+	"version" : "0.0.1",
+	"preferGlobal" : true,
+	"main" : "node-theseus",
+	"bin" : {
+		"node-theseus" : "./bin/node-theseus"
+	},
+	"dependencies" : {
+		"fondue" : "0.1.x"
+	},
+	"keywords" : [
+		"source",
+		"trace",
+		"instrumentation",
+		"debugging"
+	]
+}
