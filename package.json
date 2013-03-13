@@ -10,7 +10,8 @@
 		"node-theseus" : "./bin/node-theseus"
 	},
 	"dependencies" : {
-		"fondue" : "0.1.x"
+		"fondue" : "0.1.x",
+		"websocket.io" : "0.2.x"
 	},
 	"keywords" : [
 		"source",

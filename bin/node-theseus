@@ -4,6 +4,7 @@ if (process.argv.length === 3) {
 	var scriptPath = require('path').resolve(process.cwd(), process.argv[2]);
 	var nodeTheseus = require('../node-theseus');
 	nodeTheseus.beginInstrumentation();
+	nodeTheseus.listen();
 	nodeTheseus.launch(scriptPath);
 } else {
 	console.log('usage: node-theseus [file.js]');
