@@ -28,6 +28,7 @@ if (process.argv.length <3) {
 	console.log('usage: node-theseus [file.js]');
 } else {
 	var scriptPath = require('path').resolve(process.cwd(), process.argv[2]);
+	process.argv.splice(1, 2, scriptPath); // remove node-theseus
 	var nodeTheseus = require('../node-theseus');
 	nodeTheseus.beginInstrumentation();
 	nodeTheseus.listen();
