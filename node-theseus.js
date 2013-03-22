@@ -21,7 +21,9 @@ exports.listen = function () {
 exports.beginInstrumentation = function () {
 	// adapted from https://github.com/joyent/node/blob/master/lib/module.js
 	Module._extensions['.js'] = function(module, filename) {
-		var content = stripBOM(fs.readFileSync(filename, 'utf8'));
+		var content = fs.readFileSync(filename, 'utf8');
+		content = stripBOM(content);
+		content = stripShebang(content);
 		content = fondue.instrument(content, {
 			name: 'global.tracer',
 			include_prefix: typeof(global.tracer) === 'undefined',
@@ -38,6 +40,13 @@ function stripBOM(content) {
 	// translates it to FEFF, the UTF-16 BOM.
 	if (content.charCodeAt(0) === 0xFEFF) {
 		content = content.slice(1);
+	}
+	return content;
+}
+
+function stripShebang(content) {
+	if (/^#!/.test(content)) {
+		return content.replace(/[^\r\n]+(\r|\n)/, '$1');
 	}
 	return content;
 }
