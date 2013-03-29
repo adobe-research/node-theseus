@@ -52,11 +52,15 @@ exports.beginInstrumentation = function () {
 		var content = fs.readFileSync(filename, 'utf8');
 		content = stripBOM(content);
 		content = stripShebang(content);
-		content = fondue.instrument(content, {
-			name: 'global.tracer',
-			include_prefix: typeof(global.tracer) === 'undefined',
-			path: filename,
-		});
+
+		// only instrument first level of node_modules
+		if (!/node_modules.+node_modules/.test(filename)) {
+			content = fondue.instrument(content, {
+				name: 'global.tracer',
+				include_prefix: typeof(global.tracer) === 'undefined',
+				path: filename,
+			});
+		}
 		module._compile(content, filename);
 	};
 }
