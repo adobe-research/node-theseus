@@ -30,6 +30,10 @@ var ws     = require('websocket.io');
 var server;
 
 exports.launch = function (scriptPath) {
+	process.on('uncaughtException', function (err) {
+		console.error('uncaught exception:', err);
+	});
+
 	require(scriptPath);
 }
 
