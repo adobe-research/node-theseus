@@ -31,7 +31,7 @@ var server;
 
 exports.launch = function (scriptPath) {
 	process.on('uncaughtException', function (err) {
-		console.error('uncaught exception:', err);
+		console.error(err.stack);
 	});
 
 	require(scriptPath);
