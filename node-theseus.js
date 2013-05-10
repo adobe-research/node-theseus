@@ -46,9 +46,20 @@ exports.listen = function () {
 	server.on('connection', socketConnected);
 }
 
-exports.beginInstrumentation = function () {
+// options:
+//   noisy: 0  (no extra console output)
+//          1  (log when new files are instrumented)
+//          2+ (TBA)
+exports.beginInstrumentation = function (options) {
+	options = (options || {});
+	var noisy = options.noisy || 0;
+
 	// adapted from https://github.com/joyent/node/blob/master/lib/module.js
 	Module._extensions['.js'] = function(module, filename) {
+		if (noisy >= 1) {
+			console.log('[fondue] rewriting', filename, '...');
+		}
+
 		var content = fs.readFileSync(filename, 'utf8');
 		content = stripBOM(content);
 		content = stripShebang(content);
@@ -61,6 +72,11 @@ exports.beginInstrumentation = function () {
 				path: filename,
 			});
 		}
+
+		if (noisy >= 1) {
+			console.log('[fondue] compiling', filename, '...');
+		}
+
 		module._compile(content, filename);
 	};
 }
