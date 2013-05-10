@@ -24,26 +24,37 @@
  *
  */
 
-if (process.argv.length <3) {
-	console.log('usage: node-theseus [--theseus-verbose] [file.js] [args...]');
-} else {
-	// consume Theseus-specific arguments, removing them from process.argv
-	var noisy = 0;
-	process.argv = process.argv.filter(function (x) {
-		if (x === '--theseus-verbose') {
-			noisy = 1;
+var nodeTheseus = require('../node-theseus');
+
+function parse(argv) {
+	var options = {
+		argv: argv,
+		scriptPath: undefined,
+		noisy: 0,
+	};
+
+	options.argv = options.argv.filter(function (arg) {
+		if (arg === '--theseus-verbose') {
+			options.noisy = 1;
 			return false;
 		}
 		return true;
 	});
 
-	// assume the path of the script to run is the first argument that's left
-	var scriptPath = require('path').resolve(process.cwd(), process.argv[2]);
-	process.argv.splice(1, 2, scriptPath); // remove node-theseus, replacing with the full script path
+	if (options.argv[2]) {
+		options.scriptPath = require('path').resolve(process.cwd(), options.argv[2]);
+		options.argv.splice(1, 2, options.scriptPath); // replace path to node-theseus with the resolved script path
+	}
 
-	// begin!
-	var nodeTheseus = require('../node-theseus');
-	nodeTheseus.beginInstrumentation({ noisy: noisy });
+	return options;
+}
+
+var opt = parse(process.argv);
+if (opt.scriptPath) {
+	process.argv = opt.argv;
+	nodeTheseus.beginInstrumentation({ noisy: opt.noisy });
 	nodeTheseus.listen();
-	nodeTheseus.launch(scriptPath);
+	nodeTheseus.launch(opt.scriptPath);
+} else {
+	console.log('usage: node-theseus [--theseus-verbose] [file.js] [args...]');
 }
