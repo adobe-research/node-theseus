@@ -25,12 +25,12 @@
  */
 
 if (process.argv.length <3) {
-	console.log('usage: node-theseus [--theseus-noisy] [file.js] [args...]');
+	console.log('usage: node-theseus [--theseus-verbose] [file.js] [args...]');
 } else {
 	// consume Theseus-specific arguments, removing them from process.argv
 	var noisy = 0;
 	process.argv = process.argv.filter(function (x) {
-		if (x === '--theseus-noisy') {
+		if (x === '--theseus-verbose') {
 			noisy = 1;
 			return false;
 		}
