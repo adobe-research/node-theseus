@@ -61,7 +61,7 @@ exports.beginInstrumentation = function (options) {
 		content = stripShebang(content);
 
 		// only instrument first level of node_modules
-		if (!/node_modules.+node_modules/.test(filename)) {
+		if (!/node_modules/.test(filename)) {
 			if (noisy >= 1) {
 				console.log('[fondue] instrumenting', filename, '...');
 			}
