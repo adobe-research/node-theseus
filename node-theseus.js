@@ -56,25 +56,21 @@ exports.beginInstrumentation = function (options) {
 
 	// adapted from https://github.com/joyent/node/blob/master/lib/module.js
 	Module._extensions['.js'] = function(module, filename) {
-		if (noisy >= 1) {
-			console.log('[fondue] rewriting', filename, '...');
-		}
-
 		var content = fs.readFileSync(filename, 'utf8');
 		content = stripBOM(content);
 		content = stripShebang(content);
 
 		// only instrument first level of node_modules
 		if (!/node_modules.+node_modules/.test(filename)) {
+			if (noisy >= 1) {
+				console.log('[fondue] instrumenting', filename, '...');
+			}
+
 			content = fondue.instrument(content, {
 				name: 'global.tracer',
 				include_prefix: typeof(global.tracer) === 'undefined',
 				path: filename,
 			});
-		}
-
-		if (noisy >= 1) {
-			console.log('[fondue] compiling', filename, '...');
 		}
 
 		module._compile(content, filename);
