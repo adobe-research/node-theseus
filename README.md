@@ -8,7 +8,7 @@ Theseus is part of a collaboration between the [User Interface Design Group at M
 Install
 -------
 
-1. Install [Theseus](https://github.com/adobe-research/theseus)
+1. Install the [Theseus](https://github.com/adobe-research/theseus) extension in Brackets
 2. `npm install -g node-theseus`
 
 Use
