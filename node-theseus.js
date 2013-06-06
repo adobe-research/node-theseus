@@ -58,7 +58,9 @@ exports.listen = function () {
 	server.on('connection', socketConnected);
 }
 
-exports.beginInstrumentation = function () {
+exports.beginInstrumentation = function (options) {
+	options = (options || {});
+
 	if (noisy >= 1) {
 		console.log('[node-theseus] adding require() instrumentation hook');
 	}
@@ -70,7 +72,7 @@ exports.beginInstrumentation = function () {
 		content = stripShebang(content);
 
 		// only instrument first level of node_modules
-		if (!/node_modules/.test(filename)) {
+		if (!/node_modules/.test(filename) || options.include_modules) {
 			if (noisy >= 1) {
 				console.log('[node-theseus] instrumenting', filename, '...');
 			}

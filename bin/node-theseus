@@ -31,6 +31,7 @@ function parse(argv) {
 		argv: argv,
 		scriptPath: undefined,
 		noisy: 0,
+		include_modules: false,
 	};
 
 	options.argv = options.argv.filter(function (arg) {
@@ -41,6 +42,10 @@ function parse(argv) {
 		var m = /^--theseus-verbose=([0-9]+)$/.exec(arg);
 		if (m) {
 			options.noisy = parseInt(m[1]);
+			return false;
+		}
+		if (arg === '--theseus-include-modules') {
+			options.include_modules = true;
 			return false;
 		}
 		return true;
@@ -58,7 +63,7 @@ var opt = parse(process.argv);
 if (opt.scriptPath) {
 	process.argv = opt.argv;
 	nodeTheseus.setLogLevel(opt.noisy);
-	nodeTheseus.beginInstrumentation();
+	nodeTheseus.beginInstrumentation({ include_modules: opt.include_modules });
 	nodeTheseus.listen();
 	nodeTheseus.launch(opt.scriptPath);
 } else {
