@@ -38,6 +38,11 @@ function parse(argv) {
 			options.noisy = 1;
 			return false;
 		}
+		var m = /^--theseus-verbose=([0-9]+)$/.exec(arg);
+		if (m) {
+			options.noisy = parseInt(m[1]);
+			return false;
+		}
 		return true;
 	});
 
@@ -52,9 +57,10 @@ function parse(argv) {
 var opt = parse(process.argv);
 if (opt.scriptPath) {
 	process.argv = opt.argv;
-	nodeTheseus.beginInstrumentation({ noisy: opt.noisy });
+	nodeTheseus.setLogLevel(opt.noisy);
+	nodeTheseus.beginInstrumentation();
 	nodeTheseus.listen();
 	nodeTheseus.launch(opt.scriptPath);
 } else {
-	console.log('usage: node-theseus [--theseus-verbose] [file.js] [args...]');
+	console.log('usage: node-theseus [--theseus-verbose[=1|2]] [file.js] [args...]');
 }

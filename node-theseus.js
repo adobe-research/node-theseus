@@ -27,7 +27,15 @@ var fs     = require('fs');
 var Module = require('module');
 var ws     = require('websocket.io');
 
-var server;
+var server, noisy = 0;
+
+// level: 0  (no extra console output) (default)
+//        1  (log when new files are instrumented, when debugger connects)
+//        2  (every message from the debugger)
+//        3+ (TBA)
+exports.setLogLevel = function (level) {
+	noisy = level;
+}
 
 exports.launch = function (scriptPath) {
 	process.on('uncaughtException', function (err) {
@@ -42,17 +50,18 @@ exports.listen = function () {
 		return;
 	}
 
+	if (noisy >= 1) {
+		console.log('[node-theseus] listening for WebSocket connections on port 8888');
+	}
+
 	server = ws.listen(8888);
 	server.on('connection', socketConnected);
 }
 
-// options:
-//   noisy: 0  (no extra console output)
-//          1  (log when new files are instrumented)
-//          2+ (TBA)
-exports.beginInstrumentation = function (options) {
-	options = (options || {});
-	var noisy = options.noisy || 0;
+exports.beginInstrumentation = function () {
+	if (noisy >= 1) {
+		console.log('[node-theseus] adding require() instrumentation hook');
+	}
 
 	// adapted from https://github.com/joyent/node/blob/master/lib/module.js
 	Module._extensions['.js'] = function(module, filename) {
@@ -63,7 +72,7 @@ exports.beginInstrumentation = function (options) {
 		// only instrument first level of node_modules
 		if (!/node_modules/.test(filename)) {
 			if (noisy >= 1) {
-				console.log('[fondue] instrumenting', filename, '...');
+				console.log('[node-theseus] instrumenting', filename, '...');
 			}
 
 			content = fondue.instrument(content, {
@@ -96,7 +105,15 @@ function stripShebang(content) {
 }
 
 function socketConnected(client) {
+	if (noisy >= 1) {
+		console.log('[node-theseus] debugger connected');
+	}
+
 	client.on('message', function (data) {
+		if (noisy >= 2) {
+			console.log('[node-theseus] received debugger message:', data);
+		}
+
 		var cmd;
 		try {
 			cmd = JSON.parse(data);
@@ -116,11 +133,17 @@ function socketConnected(client) {
 			if (!bailed) {
 				data.data = result;
 			}
+			if (noisy >= 2) {
+				console.log('[node-theseus] sending debugger message:', data);
+			}
 			client.send(JSON.stringify(data));
 		} catch (e) {
 		}
 	});
 
 	client.on('close', function () {
+		if (noisy >= 1) {
+			console.log('[node-theseus] debugger disconnected');
+		}
 	});
 }
