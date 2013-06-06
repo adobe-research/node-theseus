@@ -6,6 +6,10 @@
 	"version" : "0.0.7",
 	"preferGlobal" : true,
 	"main" : "node-theseus",
+	"repository" : {
+		"type" : "git",
+		"url" : "https://github.com/adobe-research/node-theseus.git"
+	},
 	"bin" : {
 		"node-theseus" : "./bin/node-theseus"
 	},
