@@ -26,6 +26,17 @@
 
 var nodeTheseus = require('../node-theseus');
 
+/*
+Ideally, you could replace 'node' with 'node-theseus' in any script and have
+it work the same way (except with Theseus instrumentation, of course).
+
+Toward this end,
+  1) Argument names begin with --theseus so that it's unlikely any other program
+     will also use them.
+  2) Any flags node-theseus consumes are removed from process.argv before the
+     user's script is invoked.
+*/
+
 function parse(argv) {
 	var options = {
 		argv: argv,
@@ -67,5 +78,5 @@ if (opt.scriptPath) {
 	nodeTheseus.listen();
 	nodeTheseus.launch(opt.scriptPath);
 } else {
-	console.log('usage: node-theseus [--theseus-verbose[=1|2]] [file.js] [args...]');
+	console.log('usage: node-theseus [--theseus-verbose[=1|2]] [--theseus-include-modules] [file.js] [args...]');
 }
