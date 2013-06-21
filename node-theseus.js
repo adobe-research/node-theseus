@@ -81,6 +81,7 @@ exports.beginInstrumentation = function (options) {
 				name: 'global.tracer',
 				include_prefix: typeof(global.tracer) === 'undefined',
 				path: filename,
+				nodejs: true,
 			});
 		}
 
