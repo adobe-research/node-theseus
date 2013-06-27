@@ -21,6 +21,8 @@ Theseus will show call counts in the gutter next to every function definition an
 
 The `--theseus-verbose` option prints light debugging output. `--theseus-verbose=2` prints heavy debugging output. Those options may be useful for troubleshooting the connection with Theseus.
 
+The `--theseus-exclude=glob` option excludes the given file path glob from being instrumented. For example, `--theseus-exclude='*.js'` will exclude all the `*.js` files in the current directory.
+
 The `--theseus-include-modules` option causes files in `node_modules` to also be instrumented. They aren't by default for performance reasons.
 
 License

@@ -22,10 +22,11 @@
  *
  */
 
-var fondue = require('fondue');
-var fs     = require('fs');
-var Module = require('module');
-var ws     = require('websocket.io');
+var fondue    = require('fondue');
+var fs        = require('fs');
+var minimatch = require('minimatch');
+var Module    = require('module');
+var ws        = require('websocket.io');
 
 var server, noisy = 0;
 
@@ -60,6 +61,7 @@ exports.listen = function () {
 
 exports.beginInstrumentation = function (options) {
 	options = (options || {});
+	var exclude = options.exclude || [];
 
 	if (noisy >= 1) {
 		console.log('[node-theseus] adding require() instrumentation hook');
@@ -71,8 +73,20 @@ exports.beginInstrumentation = function (options) {
 		content = stripBOM(content);
 		content = stripShebang(content);
 
-		// only instrument first level of node_modules
-		if (!/node_modules/.test(filename) || options.include_modules) {
+		var skip = false;
+		if (exclude.some(function (pattern) { return minimatch(filename, pattern) })) {
+			if (noisy >= 1) {
+				console.log('[node-theseus] excluding', filename);
+			}
+			skip = true;
+		} else if (/node_modules/.test(filename) && !options.include_modules) {
+			if (noisy >= 2) {
+				console.log('[node-theseus] excluding node_module', filename);
+			}
+			skip = true;
+		}
+
+		if (!skip) {
 			if (noisy >= 1) {
 				console.log('[node-theseus] instrumenting', filename, '...');
 			}

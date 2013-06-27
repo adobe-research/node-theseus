@@ -15,7 +15,8 @@
 	},
 	"dependencies" : {
 		"fondue" : "0.3.x",
-		"websocket.io" : "0.2.x"
+		"websocket.io" : "0.2.x",
+		"minimatch" : "0.2.x"
 	},
 	"keywords" : [
 		"source",

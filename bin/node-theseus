@@ -25,6 +25,7 @@
  */
 
 var nodeTheseus = require('../node-theseus');
+var path = require('path');
 
 /*
 Ideally, you could replace 'node' with 'node-theseus' in any script and have
@@ -46,13 +47,18 @@ function parse(argv) {
 	};
 
 	options.argv = options.argv.filter(function (arg) {
+		var m;
 		if (arg === '--theseus-verbose') {
 			options.noisy = 1;
 			return false;
 		}
-		var m = /^--theseus-verbose=([0-9]+)$/.exec(arg);
-		if (m) {
+		if (m = /^--theseus-verbose=([0-9]+)$/.exec(arg)) {
 			options.noisy = parseInt(m[1]);
+			return false;
+		}
+		if (m = /^--theseus-exclude=(.+)$/.exec(arg)) {
+			options.exclude || (options.exclude = []);
+			options.exclude.push(path.resolve(process.cwd(), m[1]));
 			return false;
 		}
 		if (arg === '--theseus-include-modules') {
@@ -63,7 +69,7 @@ function parse(argv) {
 	});
 
 	if (options.argv[2]) {
-		options.scriptPath = require('path').resolve(process.cwd(), options.argv[2]);
+		options.scriptPath = path.resolve(process.cwd(), options.argv[2]);
 		options.argv.splice(1, 2, options.scriptPath); // replace path to node-theseus with the resolved script path
 	}
 
@@ -74,9 +80,12 @@ var opt = parse(process.argv);
 if (opt.scriptPath) {
 	process.argv = opt.argv;
 	nodeTheseus.setLogLevel(opt.noisy);
-	nodeTheseus.beginInstrumentation({ include_modules: opt.include_modules });
+	nodeTheseus.beginInstrumentation({
+		include_modules: opt.include_modules,
+		exclude: opt.exclude,
+	});
 	nodeTheseus.listen();
 	nodeTheseus.launch(opt.scriptPath);
 } else {
-	console.log('usage: node-theseus [--theseus-verbose[=1|2]] [--theseus-include-modules] [file.js] [args...]');
+	console.log('usage: node-theseus [--theseus-verbose[=1|2]] [--theseus-include-modules] [--theseus-exclude=glob] [file.js] [args...]');
 }
