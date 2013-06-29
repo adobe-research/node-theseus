@@ -1,5 +1,5 @@
-Theseus
-=======
+node-theseus
+============
 
 `node-theseus` is a command for launching Node.js scripts for debugging with [Theseus](https://github.com/adobe-research/theseus).
 
@@ -24,6 +24,8 @@ The `--theseus-verbose` option prints light debugging output. `--theseus-verbose
 The `--theseus-exclude=glob` option excludes the given file path glob from being instrumented. For example, `--theseus-exclude='*.js'` will exclude all the `*.js` files in the current directory.
 
 The `--theseus-include-modules` option causes files in `node_modules` to also be instrumented. They aren't by default for performance reasons.
+
+The `--theseus-max-invocations-per-tick=number` option changes the number of function invocations to record for a single tick before pausing trace collection until the next tick. The default is 4096. This limit prevents Theseus from using a ridiculous amount of memory for programs that are *occasionally* computationally intensive by detecting the intense computation and not recording all of the details.
 
 License
 -------

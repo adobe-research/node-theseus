@@ -65,6 +65,10 @@ function parse(argv) {
 			options.include_modules = true;
 			return false;
 		}
+		if (m = /^--theseus-max-invocations-per-tick=([0-9]+)$/.exec(arg)) {
+			options.maxInvocationsPerTick = parseInt(m[1]);
+			return false;
+		}
 		return true;
 	});
 
@@ -83,9 +87,10 @@ if (opt.scriptPath) {
 	nodeTheseus.beginInstrumentation({
 		include_modules: opt.include_modules,
 		exclude: opt.exclude,
+		maxInvocationsPerTick: opt.maxInvocationsPerTick,
 	});
 	nodeTheseus.listen();
 	nodeTheseus.launch(opt.scriptPath);
 } else {
-	console.log('usage: node-theseus [--theseus-verbose[=1|2]] [--theseus-include-modules] [--theseus-exclude=glob] [file.js] [args...]');
+	console.log('usage: node-theseus [--theseus-verbose[=1|2]] [--theseus-include-modules] [--theseus-exclude=glob] [--theseus-max-invocations-per-tick=4096] [file.js] [args...]');
 }

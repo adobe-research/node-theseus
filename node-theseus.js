@@ -96,6 +96,7 @@ exports.beginInstrumentation = function (options) {
 				include_prefix: typeof(global.tracer) === 'undefined',
 				path: filename,
 				nodejs: true,
+				maxInvocationsPerTick: options.maxInvocationsPerTick,
 			});
 		}
 
