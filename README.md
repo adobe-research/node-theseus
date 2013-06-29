@@ -17,7 +17,7 @@ Use
 1. Start Node.js with `node-theseus [yourapp.js]`
 2. Open `yourapp.js` in Brackets
 
-Theseus will show call counts in the gutter next to every function definition any `require`'d `.js` files. Click on one or more of them to show a log of all calls to those functions with their arguments and return values.
+The process will continue to run even after your program finishes so that you can connect to it with [Theseus](https://github.com/adobe-research/theseus).
 
 The `--theseus-verbose` option prints light debugging output. `--theseus-verbose=2` prints heavy debugging output. Those options may be useful for troubleshooting the connection with Theseus.
 
