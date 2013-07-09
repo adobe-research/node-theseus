@@ -92,8 +92,8 @@ exports.beginInstrumentation = function (options) {
 			}
 
 			content = fondue.instrument(content, {
-				name: 'global.tracer',
-				include_prefix: typeof(global.tracer) === 'undefined',
+				name: 'global.__tracer',
+				include_prefix: typeof(global.__tracer) === 'undefined',
 				path: filename,
 				nodejs: true,
 				maxInvocationsPerTick: options.maxInvocationsPerTick,
@@ -141,7 +141,7 @@ function socketConnected(client) {
 
 		var result, bailed = false;
 		try {
-			result = global.tracer[cmd.name].apply(global.tracer, cmd.arguments);
+			result = global.__tracer[cmd.name].apply(global.__tracer, cmd.arguments);
 		} catch (e) {
 			bailed = true;
 		}
