@@ -39,6 +39,10 @@ exports.setLogLevel = function (level) {
 }
 
 exports.launch = function (scriptPath) {
+	process.exit = function () {
+		console.log('[node-theseus] caught process.exit(), not exiting');
+	};
+
 	process.on('uncaughtException', function (err) {
 		console.error(err.stack);
 	});
