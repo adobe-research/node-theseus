@@ -71,6 +71,8 @@ exports.beginInstrumentation = function (options) {
 		console.log('[node-theseus] adding require() instrumentation hook');
 	}
 
+	createTracer(options);
+
 	// adapted from https://github.com/joyent/node/blob/master/lib/module.js
 	Module._extensions['.js'] = function(module, filename) {
 		var content = fs.readFileSync(filename, 'utf8');
@@ -97,7 +99,7 @@ exports.beginInstrumentation = function (options) {
 
 			content = fondue.instrument(content, {
 				name: 'global.tracer',
-				include_prefix: typeof(global.tracer) === 'undefined',
+				include_prefix: false,
 				path: filename,
 				nodejs: true,
 				maxInvocationsPerTick: options.maxInvocationsPerTick,
@@ -106,6 +108,14 @@ exports.beginInstrumentation = function (options) {
 
 		module._compile(content, filename);
 	};
+}
+
+function createTracer(options) {
+	eval(fondue.instrumentationPrefix({
+		name: 'global.tracer',
+		nodejs: true,
+		maxInvocationsPerTick: options.maxInvocationsPerTick,
+	}));
 }
 
 // taken from https://github.com/joyent/node/blob/master/lib/module.js
