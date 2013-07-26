@@ -44,7 +44,7 @@ exports.launch = function (scriptPath) {
 	};
 
 	process.on('uncaughtException', function (err) {
-		console.error(err.stack);
+		console.error('[node-theseus] caught uncaught exception', err.stack ? ("\n" + err.stack) : (err + " (no stack)"));
 	});
 
 	require(scriptPath);
