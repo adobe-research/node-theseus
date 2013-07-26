@@ -16,7 +16,8 @@
 	"dependencies" : {
 		"fondue" : "0.4.x",
 		"websocket.io" : "0.2.x",
-		"minimatch" : "0.2.x"
+		"minimatch" : "0.2.x",
+		"source-map-support" : "0.2.x"
 	},
 	"keywords" : [
 		"source",

@@ -27,8 +27,11 @@ var fs        = require('fs');
 var minimatch = require('minimatch');
 var Module    = require('module');
 var ws        = require('websocket.io');
+var sms       = require('source-map-support');
 
 var server, noisy = 0;
+
+var maps = {}; // path -> map
 
 // level: 0  (no extra console output) (default)
 //        1  (log when new files are instrumented, when debugger connects)
@@ -44,7 +47,19 @@ exports.launch = function (scriptPath) {
 	};
 
 	process.on('uncaughtException', function (err) {
-		console.error('[node-theseus] caught uncaught exception', err.stack ? ("\n" + err.stack) : (err + " (no stack)"));
+		console.error('[node-theseus] caught uncaught exception');
+	});
+
+	sms.install({
+		retrieveSourceMap: function(source) {
+			if (source in maps) {
+				return {
+					url: source,
+					map: maps[source],
+				};
+			}
+			return null;
+		}
 	});
 
 	require(scriptPath);
@@ -74,7 +89,7 @@ exports.beginInstrumentation = function (options) {
 	createTracer(options);
 
 	// adapted from https://github.com/joyent/node/blob/master/lib/module.js
-	Module._extensions['.js'] = function(module, filename) {
+	Module._extensions['.js'] = function (module, filename) {
 		var content = fs.readFileSync(filename, 'utf8');
 		content = stripBOM(content);
 		content = stripShebang(content);
@@ -92,10 +107,14 @@ exports.beginInstrumentation = function (options) {
 			skip = true;
 		}
 
-		if (!skip) {
+		if (skip) {
+			module._compile(content, filename);
+		} else {
 			if (noisy >= 1) {
 				console.log('[node-theseus] instrumenting', filename, '...');
 			}
+
+			var newFilename = filename + ".fondue";
 
 			content = fondue.instrument(content, {
 				name: 'global.tracer',
@@ -103,10 +122,17 @@ exports.beginInstrumentation = function (options) {
 				path: filename,
 				nodejs: true,
 				maxInvocationsPerTick: options.maxInvocationsPerTick,
+				sourceFilename: filename,
+				generatedFilename: newFilename,
 			});
-		}
 
-		module._compile(content, filename);
+			maps[newFilename] = content.map().toString();
+
+			content = content.toString();
+
+			module.filename = newFilename;
+			module._compile(content, filename + ".fondue");
+		}
 	};
 }
 
