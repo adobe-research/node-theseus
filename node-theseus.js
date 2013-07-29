@@ -22,6 +22,7 @@
  *
  */
 
+var child_process = require('child_process');
 var fondue    = require('fondue');
 var fs        = require('fs');
 var minimatch = require('minimatch');
@@ -44,6 +45,16 @@ exports.setLogLevel = function (level) {
 exports.launch = function (scriptPath) {
 	process.exit = function () {
 		console.log('[node-theseus] caught process.exit(), not exiting');
+	};
+
+	var spawn = child_process.spawn, fork = child_process.fork;
+	child_process.spawn = function () {
+		console.log('[node-theseus] notice: node-theseus cannot instrument spawned processes yet');
+		return spawn.apply(this, arguments);
+	};
+	child_process.fork = function () {
+		console.log('[node-theseus] notice: node-theseus cannot instrument forked processes yet');
+		return fork.apply(this, arguments);
 	};
 
 	process.on('uncaughtException', function (err) {
