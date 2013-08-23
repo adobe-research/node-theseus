@@ -137,7 +137,10 @@ exports.beginInstrumentation = function (options) {
 				generatedFilename: newFilename,
 			});
 
-			maps[newFilename] = content.map().toString();
+			var map = content.map().toString();
+			if (map) {
+				maps[newFilename] = map;
+			}
 
 			content = content.toString();
 
