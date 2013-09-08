@@ -43,6 +43,7 @@ function parse(argv) {
 		argv: argv,
 		scriptPath: undefined,
 		noisy: 0,
+        port: process.env.port || 8080,
 		include_modules: false,
 	};
 
@@ -69,6 +70,10 @@ function parse(argv) {
 			options.maxInvocationsPerTick = parseInt(m[1]);
 			return false;
 		}
+		if(m = /^--theseus-port=([0-9]+)$/.exec(arg)) {
+		    options.port = parseInt(m[1]);
+			return false;
+		}
 		return true;
 	});
 
@@ -89,8 +94,8 @@ if (opt.scriptPath) {
 		exclude: opt.exclude,
 		maxInvocationsPerTick: opt.maxInvocationsPerTick,
 	});
-	nodeTheseus.listen();
+	nodeTheseus.listen(opt.port);
 	nodeTheseus.launch(opt.scriptPath);
 } else {
-	console.log('usage: node-theseus [--theseus-verbose[=1|2]] [--theseus-include-modules] [--theseus-exclude=glob] [--theseus-max-invocations-per-tick=4096] [file.js] [args...]');
+	console.log('usage: node-theseus [--theseus-verbose[=1|2]] [--theseus-include-modules] [--theseus-exclude=glob] [--theseus-max-invocations-per-tick=4096] [--theseus-port=3000] [file.js] [args...]');
 }

@@ -27,7 +27,7 @@ var fondue    = require('fondue');
 var fs        = require('fs');
 var minimatch = require('minimatch');
 var Module    = require('module');
-var ws        = require('websocket.io');
+var WebSocketServer = require('ws').Server;
 var sms       = require('source-map-support');
 
 var server, noisy = 0;
@@ -76,16 +76,16 @@ exports.launch = function (scriptPath) {
 	require(scriptPath);
 }
 
-exports.listen = function () {
+exports.listen = function (port) {
 	if (server) {
 		return;
 	}
 
 	if (noisy >= 1) {
-		console.log('[node-theseus] listening for WebSocket connections on port 8888');
+		console.log('[node-theseus] listening for WebSocket connections on port '+ port);
 	}
 
-	server = ws.listen(8888);
+    server = new WebSocketServer({port: port});
 	server.on('connection', socketConnected);
 }
 
