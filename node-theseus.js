@@ -85,7 +85,7 @@ exports.listen = function (port) {
 		console.log('[node-theseus] listening for WebSocket connections on port '+ port);
 	}
 
-        server = new WebSocketServer({port: port});
+    server = new WebSocketServer({port: port});
 	server.on('connection', socketConnected);
 }
 

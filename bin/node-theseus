@@ -43,7 +43,7 @@ function parse(argv) {
 		argv: argv,
 		scriptPath: undefined,
 		noisy: 0,
-                port: process.env.port || 8080,
+        port: process.env.port || 8080,
 		include_modules: false,
 	};
 
@@ -71,7 +71,7 @@ function parse(argv) {
 			return false;
 		}
 		if(m = /^--theseus-port=([0-9]+)$/.exec(arg)) {
-		        options.port = parseInt(m[1]);
+		    options.port = parseInt(m[1]);
 			return false;
 		}
 		return true;
