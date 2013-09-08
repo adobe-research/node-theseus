@@ -43,7 +43,7 @@ function parse(argv) {
 		argv: argv,
 		scriptPath: undefined,
 		noisy: 0,
-        port: process.env.port || 8080,
+        port: process.env.port || 8888,
 		include_modules: false,
 	};
 
