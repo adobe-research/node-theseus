@@ -30,7 +30,7 @@ var Module    = require('module');
 var WebSocketServer = require('ws').Server;
 var sms       = require('source-map-support');
 
-var server, noisy = 0, port = process.env.port || 8080;
+var server, noisy = 0;
 
 var maps = {}; // path -> map
 
@@ -76,7 +76,7 @@ exports.launch = function (scriptPath) {
 	require(scriptPath);
 }
 
-exports.listen = function () {
+exports.listen = function (port) {
 	if (server) {
 		return;
 	}

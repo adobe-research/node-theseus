@@ -19,6 +19,8 @@ Use
 
 The process will continue to run even after your program finishes so that you can connect to it with [Theseus](https://github.com/adobe-research/theseus).
 
+The `--theseus-port` option starts theseus on that port. The default port is `process.env.port || 8080`
+
 The `--theseus-verbose` option prints light debugging output. `--theseus-verbose=2` prints heavy debugging output. Those options may be useful for troubleshooting the connection with Theseus.
 
 The `--theseus-exclude=glob` option excludes the given file path glob from being instrumented. For example, `--theseus-exclude='*.js'` will exclude all the `*.js` files in the current directory.
