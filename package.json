@@ -3,7 +3,7 @@
 	"description" : "wrapper of the node command for debugging scripts with Theseus",
 	"license" : "MIT",
 	"author" : "Tom Lieber <tom@alltom.com>",
-	"version" : "0.2.1",
+	"version" : "0.2.2",
 	"preferGlobal" : true,
 	"main" : "node-theseus",
 	"repository" : {
