@@ -56,11 +56,19 @@ exports.launch = function (scriptPath) {
 
 	var spawn = child_process.spawn, fork = child_process.fork;
 	child_process.spawn = function () {
-		console.log('[node-theseus] notice: node-theseus cannot instrument spawned processes yet');
+		if (noisy >= 1) {
+			console.log('[node-theseus] notice: node-theseus cannot instrument spawned processes yet---child_process.spawn called with arguments:', arguments);
+		} else {
+			console.log('[node-theseus] notice: node-theseus cannot instrument spawned processes yet (use --theseus-verbose for more information)');
+		}
 		return spawn.apply(this, arguments);
 	};
 	child_process.fork = function () {
-		console.log('[node-theseus] notice: node-theseus cannot instrument forked processes yet');
+		if (noisy >= 1) {
+			console.log('[node-theseus] notice: node-theseus cannot instrument forked processes yet---child_process.fork called with arguments:', arguments);
+		} else {
+			console.log('[node-theseus] notice: node-theseus cannot instrument forked processes yet (use --theseus-verbose for more information)');
+		}
 		return fork.apply(this, arguments);
 	};
 
