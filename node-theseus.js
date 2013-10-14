@@ -43,8 +43,15 @@ exports.setLogLevel = function (level) {
 }
 
 exports.launch = function (scriptPath) {
+	var exit = process.exit;
+	var exitCount = 0;
 	process.exit = function () {
-		console.log('[node-theseus] caught process.exit(), not exiting');
+		if (++exitCount >= 3) {
+			console.log('[node-theseus] caught process.exit() ' + exitCount + ' times, exiting');
+			exit();
+		} else {
+			console.log('[node-theseus] caught process.exit() ' + exitCount + ' time' + (exitCount === 1 ? '' : 's') + ', not exiting');
+		}
 	};
 
 	var spawn = child_process.spawn, fork = child_process.fork;
