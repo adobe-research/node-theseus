@@ -160,7 +160,7 @@ exports.beginInstrumentation = function (options) {
 			content = content.toString();
 
 			module.filename = newFilename;
-			module._compile(content, filename + ".fondue");
+			module._compile(content, filename);
 		}
 	};
 }
