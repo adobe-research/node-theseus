@@ -29,6 +29,31 @@ The `--theseus-include-modules` option causes files in `node_modules` to also be
 
 The `--theseus-max-invocations-per-tick=number` option changes the number of function invocations to record for a single tick before pausing trace collection until the next tick. The default is 4096. This limit prevents Theseus from using a ridiculous amount of memory for programs that are *occasionally* computationally intensive by detecting the intense computation and not recording all of the details.
 
+Development
+-----------
+
+1. In your development directory, run:
+
+    ```
+    git clone git://github.com/adobe-research/fondue
+    git clone git://github.com/adobe-research/node-theseus
+    ```
+
+2. Install each project's dependencies:
+
+    ```
+    cd fondue; npm install; cd ..
+    cd node-theseus; npm install; cd ..
+    ```
+
+3. Use the development version of fondue in node-theseus, then install node-theseus globally using `npm link`, which installs symlinks to the development directory instead of copying the files:
+
+    ```
+    cd node-theseus
+    npm link ../fondue
+    npm link
+    ```
+
 License
 -------
 
