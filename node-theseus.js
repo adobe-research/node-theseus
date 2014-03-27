@@ -101,6 +101,7 @@ exports.listen = function (port) {
 	}
 
 	server = new WebSocketServer({ port: port });
+	server.on('error', socketError);
 	server.on('connection', socketConnected);
 }
 
@@ -233,4 +234,8 @@ function socketConnected(client) {
 			console.log('[node-theseus] debugger disconnected');
 		}
 	});
+}
+
+function socketError(err) {
+	console.error('[node-theseus] socket error: ' + err);
 }
