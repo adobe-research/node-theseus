@@ -153,7 +153,7 @@ exports.beginInstrumentation = function (options) {
 				generatedFilename: newFilename,
 			});
 
-			var map = content.map().toString();
+			var map = typeof content.map !== 'undefined' ? content.map().toString() : false;
 			if (map) {
 				maps[newFilename] = map;
 			}
