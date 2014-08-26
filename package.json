@@ -14,7 +14,7 @@
 		"node-theseus" : "./bin/node-theseus"
 	},
 	"dependencies" : {
-		"fondue" : "0.5.2",
+		"fondue" : "0.6.x",
 		"ws" : "0.4.x",
 		"minimatch" : "0.2.x",
 		"source-map-support" : "0.2.x"
